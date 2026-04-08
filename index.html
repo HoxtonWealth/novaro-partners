@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Novaro Partners — A New Chapter in Wealth Planning</title>
+<title>Novaro Partners — Coming Soon</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -23,7 +23,10 @@
 
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-  html { overflow-x: hidden; }
+  html, body {
+    height: 100%;
+    overflow-x: hidden;
+  }
 
   body {
     font-family: var(--np-font-sans);
@@ -31,17 +34,21 @@
     background: var(--np-cream);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
     min-height: 100vh;
   }
 
   img, svg { max-width: 100%; height: auto; }
 
-  /* ── HEADER ── */
-  .header {
-    background: var(--np-cream);
-    padding: 48px 24px 0;
+  .page {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
+    padding: 48px 24px;
   }
 
   .logo-block {
@@ -49,7 +56,7 @@
     flex-direction: column;
     align-items: center;
     gap: 10px;
-    margin-bottom: 48px;
+    margin-bottom: 56px;
   }
 
   .logo-main {
@@ -80,215 +87,55 @@
 
   .powered-by svg { height: 14px; width: auto; flex-shrink: 0; }
 
-  /* ── HERO ── */
-  .hero {
-    background: var(--np-cream);
-    text-align: center;
-    padding: 0 24px 60px;
+  .divider {
+    width: 48px;
+    height: 3px;
+    background: var(--np-green);
+    margin-bottom: 32px;
   }
 
-  .hero h1 {
+  h1 {
     font-family: var(--np-font-serif);
-    font-size: clamp(26px, 5vw, 42px);
+    font-size: clamp(28px, 5vw, 44px);
     font-weight: 400;
     color: var(--np-green-dark);
-    margin-bottom: 20px;
-    line-height: 1.25;
+    margin-bottom: 16px;
+    line-height: 1.2;
   }
 
-  .hero p {
+  .subtitle {
     font-size: 16px;
     color: var(--np-text-muted);
-    max-width: 480px;
-    margin: 0 auto;
+    max-width: 420px;
     line-height: 1.65;
+    margin-bottom: 40px;
   }
 
-  /* ── DIVIDER BAR ── */
-  .divider-bar { height: 5px; background: var(--np-green); width: 100%; }
-
-  /* ── ABOUT ── */
-  .about { background: var(--np-white); padding: 56px 24px 48px; }
-
-  .container { max-width: 720px; margin: 0 auto; width: 100%; }
-
-  .section-line { width: 100%; height: 1px; background: var(--np-border); }
-
-  .about h2 {
-    font-family: var(--np-font-serif);
-    font-size: clamp(22px, 3.5vw, 28px);
-    font-weight: 400;
-    color: var(--np-green-dark);
-    margin-bottom: 16px;
-  }
-
-  .about .section-line { margin-bottom: 28px; }
-
-  .about p {
-    font-size: 15px;
-    color: var(--np-text-muted);
-    line-height: 1.75;
-    margin-bottom: 16px;
-  }
-
-  .about p:last-child { margin-bottom: 0; }
-
-  /* ── CONTACT ── */
-  .contact { background: var(--np-white); padding: 24px 24px 64px; }
-
-  .contact-grid {
-    max-width: 720px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 48px;
-    width: 100%;
-  }
-
-  .contact-col h3 {
-    font-family: var(--np-font-serif);
-    font-size: clamp(20px, 3vw, 22px);
-    font-weight: 400;
-    color: var(--np-green-dark);
-    margin-bottom: 12px;
-  }
-
-  .contact-col .section-line { margin-bottom: 20px; }
-
-  .contact-col > p {
+  .contact-line {
     font-size: 14px;
     color: var(--np-text-muted);
-    line-height: 1.7;
-    margin-bottom: 20px;
   }
 
-  .address-block { font-size: 14px; color: var(--np-text); line-height: 1.8; }
-
-  .address-block a {
+  .contact-line a {
     color: var(--np-green);
     text-decoration: none;
-    word-break: break-all;
   }
 
-  .address-block a:hover { text-decoration: underline; }
+  .contact-line a:hover { text-decoration: underline; }
 
-  /* ── FORM ── */
-  .form-group { margin-bottom: 12px; }
-
-  .form-group input {
-    width: 100%;
-    padding: 12px 14px;
-    border: 1px solid var(--np-border);
-    border-radius: 4px;
-    font-family: var(--np-font-sans);
-    font-size: 16px; /* 16px prevents iOS zoom */
-    color: var(--np-text);
-    background: var(--np-white);
-    transition: border-color 0.2s, box-shadow 0.2s;
-    -webkit-appearance: none;
-    appearance: none;
-  }
-
-  .form-group input::placeholder { color: #94a3b8; }
-
-  .form-group input:focus {
-    outline: none;
-    border-color: var(--np-green);
-    box-shadow: 0 0 0 3px rgba(26, 74, 58, 0.12);
-  }
-
-  .submit-btn {
-    width: 100%;
-    padding: 14px;
-    background: var(--np-green-dark);
-    color: var(--np-white);
-    border: none;
-    border-radius: 4px;
-    font-family: var(--np-font-sans);
-    font-size: 15px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background 0.2s;
-    margin-top: 4px;
-    min-height: 48px;
-    -webkit-appearance: none;
-    appearance: none;
-  }
-
-  .submit-btn:hover { background: var(--np-green-light); }
-  .submit-btn:active { background: var(--np-green); }
-
-  /* ── HOXTON BANNER ── */
-  .hoxton-banner { background: var(--np-green-dark); text-align: center; padding: 56px 24px; }
-
-  .hoxton-banner h2 {
-    font-family: var(--np-font-serif);
-    font-size: clamp(22px, 3.5vw, 28px);
-    font-weight: 400;
-    color: var(--np-white);
-    margin-bottom: 14px;
-  }
-
-  .hoxton-banner p {
-    font-size: 15px;
-    color: rgba(255,255,255,0.72);
-    max-width: 500px;
-    margin: 0 auto 28px;
-    line-height: 1.65;
-  }
-
-  .visit-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 13px 36px;
-    background: transparent;
-    color: var(--np-white);
-    border: 1.5px solid var(--np-white);
-    border-radius: 4px;
-    font-family: var(--np-font-sans);
-    font-size: 14px;
-    font-weight: 500;
-    text-decoration: none;
-    transition: background 0.2s, color 0.2s;
-    min-height: 48px;
-  }
-
-  .visit-btn:hover { background: var(--np-white); color: var(--np-green-dark); }
-
-  /* ── FOOTER ── */
   .footer {
     background: var(--np-green-dark);
-    border-top: 1px solid rgba(255,255,255,0.1);
     text-align: center;
     padding: 20px 24px;
   }
 
   .footer p { font-size: 13px; color: rgba(255,255,255,0.5); }
 
-  /* ══ RESPONSIVE ══ */
-
-  @media (max-width: 768px) {
-    .header { padding: 36px 20px 0; }
-    .hero { padding: 0 20px 48px; }
-    .about { padding: 48px 20px 40px; }
-    .contact { padding: 16px 20px 56px; }
-    .hoxton-banner { padding: 48px 20px; }
-    .contact-grid { gap: 40px; }
-  }
-
   @media (max-width: 640px) {
-    .contact-grid { grid-template-columns: 1fr; gap: 36px; }
     .logo-icon { width: 44px; height: 44px; }
     .logo-text { font-size: 28px; }
     .logo-text span { font-size: 24px; }
-    .logo-block { margin-bottom: 36px; }
-    .header { padding: 32px 16px 0; }
-    .hero { padding: 0 16px 40px; }
-    .about { padding: 40px 16px 32px; }
-    .contact { padding: 12px 16px 48px; }
-    .hoxton-banner { padding: 40px 16px; }
-    .footer { padding: 16px; }
+    .logo-block { margin-bottom: 40px; }
   }
 
   @media (max-width: 380px) {
@@ -309,7 +156,7 @@
 </head>
 <body>
 
-<header class="header">
+<main class="page">
   <div class="logo-block">
     <div class="logo-main">
       <svg class="logo-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Novaro Partners" role="img">
@@ -326,65 +173,12 @@
       </svg>
     </div>
   </div>
-</header>
 
-<section class="hero">
-  <h1>A new chapter in wealth planning.</h1>
-  <p>This is where introductory text will go as placeholder copy for now. One sentence or two to briefly describe the firm and its core offering.</p>
-</section>
-
-<div class="divider-bar"></div>
-
-<section class="about">
-  <div class="container">
-    <h2>About Novaro Partners</h2>
-    <div class="section-line"></div>
-    <p>This is where a brief description of Novaro Partners will go, acting as placeholder text for now.</p>
-    <p>The copy here will highlight that Novaro Partners is a trading style of Hoxton Wealth and outline its key offerings in structured, tailored wealth planning for international clients.</p>
-    <p>We work closely with our clients to deliver advice across investments, retirement planning, and cross border financial considerations.</p>
-  </div>
-</section>
-
-<section class="contact">
-  <div class="contact-grid">
-    <div class="contact-col">
-      <h3>Get in touch</h3>
-      <div class="section-line"></div>
-      <p>This is where a brief intro for the contact section will go.</p>
-      <div class="address-block">
-        Novaro Partners<br>
-        Blossom Yard<br>
-        15 Blossom Street<br>
-        London EC1Y 8SR<br><br>
-        <a href="mailto:info@novaropartners.co.uk">info@novaropartners.co.uk</a>
-      </div>
-    </div>
-
-    <div class="contact-col">
-      <h3>Contact Us</h3>
-      <div class="section-line"></div>
-      <p>This is where a brief intro for the contact section will go.</p>
-      <form onsubmit="event.preventDefault(); alert('Form submitted!');">
-        <div class="form-group">
-          <input type="text" placeholder="Full Name" required aria-label="Full Name">
-        </div>
-        <div class="form-group">
-          <input type="email" placeholder="Email Address" required aria-label="Email Address">
-        </div>
-        <div class="form-group">
-          <input type="tel" placeholder="Phone Number" aria-label="Phone Number">
-        </div>
-        <button type="submit" class="submit-btn">Submit</button>
-      </form>
-    </div>
-  </div>
-</section>
-
-<section class="hoxton-banner">
-  <h2>Part of the Hoxton Wealth Group</h2>
-  <p>This is where a brief sentence or two goes to describe Novaro Partners' connection to Hoxton Wealth.</p>
-  <a href="https://hoxtonwealth.com" class="visit-btn" target="_blank" rel="noopener">Visit Hoxton Wealth</a>
-</section>
+  <div class="divider"></div>
+  <h1>Coming Soon</h1>
+  <p class="subtitle">A new chapter in wealth planning. We're preparing something exceptional for you.</p>
+  <p class="contact-line">Get in touch — <a href="mailto:info@novaropartners.co.uk">info@novaropartners.co.uk</a></p>
+</main>
 
 <footer class="footer">
   <p>Novaro Partners is a trading style of Hoxton Wealth.</p>
