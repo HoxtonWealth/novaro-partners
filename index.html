@@ -44,41 +44,11 @@
     text-align: center;
   }
 
-  .logo-block {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
+  .logo-img {
+    max-width: 280px;
+    height: auto;
     margin-bottom: 48px;
   }
-
-  .logo-main {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .logo-icon { width: 52px; height: 52px; flex-shrink: 0; }
-
-  .logo-text {
-    font-family: var(--np-font-serif);
-    font-size: 34px;
-    color: var(--np-green);
-    line-height: 1.05;
-    text-align: left;
-  }
-
-  .logo-text span { display: block; font-size: 30px; }
-
-  .powered-by {
-    font-size: 13px;
-    color: var(--np-text-muted);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .powered-by svg { height: 14px; width: auto; flex-shrink: 0; }
 
   /* ── HERO ── */
   .hero {
@@ -279,10 +249,7 @@
 
   @media (max-width: 640px) {
     .contact-grid { grid-template-columns: 1fr; gap: 36px; }
-    .logo-icon { width: 44px; height: 44px; }
-    .logo-text { font-size: 28px; }
-    .logo-text span { font-size: 24px; }
-    .logo-block { margin-bottom: 36px; }
+    .logo-img { max-width: 220px; margin-bottom: 36px; }
     .header { padding: 32px 16px 0; }
     .hero { padding: 0 16px 40px; }
     .about { padding: 40px 16px 32px; }
@@ -292,11 +259,7 @@
   }
 
   @media (max-width: 380px) {
-    .logo-icon { width: 38px; height: 38px; }
-    .logo-text { font-size: 24px; }
-    .logo-text span { font-size: 20px; }
-    .powered-by { font-size: 12px; }
-    .powered-by svg { height: 12px; }
+    .logo-img { max-width: 180px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -310,22 +273,7 @@
 <body>
 
 <header class="header">
-  <div class="logo-block">
-    <div class="logo-main">
-      <svg class="logo-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Novaro Partners" role="img">
-        <rect width="48" height="48" rx="6" fill="#1a4a3a"/>
-        <path d="M34.5 10H29.8a1.7 1.7 0 0 0-1.62 1.18l-1.48 4.58c-.45 1.4-1.33 2.35-3.49 2.35h-3.04l2.19-6.78A1.02 1.02 0 0 0 21.39 10h-4.68a1.7 1.7 0 0 0-1.62 1.18L13.64 15.8c-.45 1.4-1.33 2.35-3.49 2.35H7l8.58 7.74a2.1 2.1 0 0 0 3.41-.92l1.96-6.05 7.54 7.24a2.1 2.1 0 0 0 3.41-.92l2.21-6.83 2.19-6.78A1.02 1.02 0 0 0 34.5 10" fill="#ffffff"/>
-      </svg>
-      <div class="logo-text">Novaro<span>Partners</span></div>
-    </div>
-    <div class="powered-by">
-      powered by
-      <svg width="120" height="14" viewBox="0 0 227 26" fill="none" aria-label="HoxtonWealth" role="img">
-        <path d="M45.186 0H37.77a2.7 2.7 0 0 0-2.57 1.871l-2.347 7.264c-.718 2.223-2.112 3.729-5.529 3.729h-4.819l3.471-10.745A1.62 1.62 0 0 0 24.434 0h-7.416a2.7 2.7 0 0 0-2.57 1.871L12.1 9.135c-.718 2.223-2.112 3.729-5.529 3.729H0l13.6 12.275a3.337 3.337 0 0 0 5.411-1.451l3.1-9.6L34.35 25.139a3.337 3.337 0 0 0 5.411-1.451l3.5-10.823 3.468-10.746A1.62 1.62 0 0 0 45.186 0" fill="#0B5D5F"/>
-        <path d="M81.932 9.337c-4.512 0-6.939 2.941-6.939 7.34s2.428 7.34 6.939 7.34 6.94-2.941 6.94-7.34-2.428-7.34-6.94-7.34m0 12.673c-2.77 0-4.083-2.079-4.083-5.335s1.313-5.334 4.083-5.334 4.085 2.079 4.085 5.334-1.316 5.334-4.085 5.334m37.181-12.673c-4.512 0-6.939 2.941-6.939 7.34s2.427 7.34 6.939 7.34 6.939-2.941 6.939-7.34-2.428-7.34-6.939-7.34m0 12.673c-2.77 0-4.084-2.079-4.084-5.335s1.314-5.334 4.084-5.334 4.086 2.082 4.086 5.334-1.314 5.333-4.083 5.333m54.257-12.7c-4.712 0-7.225 3.341-7.225 7.367 0 4 2.542 7.34 7.454 7.34 4.2 0 6.025-2.4 6.654-4.626h-3.569a2.94 2.94 0 0 1-3.2 2.142c-2.42 0-3.73-1.833-3.766-3.993h10.7v-.749c0-4.312-2.371-7.481-7.054-7.481m-3.627 5.734a3.475 3.475 0 0 1 3.627-3.25 3.31 3.31 0 0 1 3.484 3.25Zm-99.648-2.177h-9.18V4.993h-2.856v18.822h2.856v-8.666h9.18v8.666h2.856V4.993h-2.856Zm151.307-3.555a4.98 4.98 0 0 0-4.226 1.885v-6.2h-3.713v18.821h3.712v-8.281c0-2.256 1.085-3.655 3.141-3.655 1.971 0 3 1.2 3 3.369v8.567h3.712v-8.709c0-3.655-2.142-5.8-5.625-5.8M209.083 4.99h-3.713v4.545h-3.008v3h3.008v11.28h3.713V12.541h3.008v-3h-3.008Zm-11.816 18.825h3.712V4.993h-3.712Zm-2.542-2.54v-7.168c0-3.17-2.2-4.8-6.168-4.8-4.426 0-6.368 2.2-6.682 4.655h3.57c.143-1.228 1.171-2.171 2.941-2.171 1.628 0 2.771.628 2.771 2.2 0 .713-.428.942-1.314 1.085l-3.57.514c-3.084.428-4.969 1.57-4.969 4.169s2.312 4.256 5.539 4.256a5.05 5.05 0 0 0 4.369-1.828v.144a8.2 8.2 0 0 0 .171 1.483h3.6v-.225a8.6 8.6 0 0 1-.257-2.313Zm-3.57-2.742a2.94 2.94 0 0 1-3.228 3.113c-1.6 0-2.911-.686-2.911-2.058 0-1.171.971-1.542 2.371-1.8l2.37-.484a2.28 2.28 0 0 0 1.4-.6Zm-27.843-13.54-3.253 14.951-3.427-14.951h-4.733l-3.427 14.951-3.254-14.951h-4l5.063 18.822h4.587l3.4-14.551 3.4 14.551h4.587l5.063-18.822Zm-28.059 4.344a4.83 4.83 0 0 0-4.454 2.284V9.538h-2.857v14.277h2.857v-8.223c0-2.6 1.228-4.284 3.655-4.284 2.284 0 3.455 1.428 3.455 3.941v8.566h2.856v-8.681c0-3.685-2.028-5.8-5.51-5.8M108.968 4.99h-2.857v4.545h-3.092V11.7h3.092v12.112h2.856V11.703h3.091V9.538h-3.088Zm-9.5 4.546-3.833 5.338-3.826-5.34h-3l5.111 6.854-5.111 7.423h3l3.826-5.8 3.826 5.8h2.97l-5.083-7.423 5.083-6.854Z" fill="#0B5D5F"/>
-      </svg>
-    </div>
-  </div>
+  <img src="logo.png" alt="Novaro Partners — powered by Hoxton Wealth" class="logo-img">
 </header>
 
 <section class="hero">
