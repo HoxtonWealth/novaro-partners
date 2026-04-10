@@ -12,6 +12,8 @@ module.exports = async function handler(req, res) {
     return res.status(500).json({ error: 'Server misconfiguration: missing ORTTO_API_KEY' });
   }
 
+  const scid = process.env.ORTTO_SCID;
+
   try {
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
 
@@ -19,7 +21,8 @@ module.exports = async function handler(req, res) {
       return res.status(400).json({ error: 'Invalid payload' });
     }
 
-    // Inject the real client IP from request headers into the location block.
+    // Inject the real client IP from request headers into the location block,
+    // and the scid from env into activity attributes.
     const forwarded = req.headers['x-forwarded-for'];
     const clientIp =
       (typeof forwarded === 'string' && forwarded.split(',')[0].trim()) ||
@@ -29,6 +32,10 @@ module.exports = async function handler(req, res) {
     body.activities.forEach(function (activity) {
       if (activity && activity.location) {
         activity.location.source_ip = clientIp;
+      }
+      if (activity && scid) {
+        if (!activity.attributes) activity.attributes = {};
+        activity.attributes['str:cm:scid'] = scid;
       }
     });
 

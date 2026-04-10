@@ -427,9 +427,6 @@
 
 <script>
 (function () {
-  // Hardcoded SCID for this landing page. Fill in when provided.
-  var SCID = "";
-
   // [ISO alpha-2, Country Name, Dial Code]
   var COUNTRIES = [
     ["AF","Afghanistan","93"],["AL","Albania","355"],["DZ","Algeria","213"],["AS","American Samoa","1684"],
@@ -584,8 +581,6 @@
       "str:cm:country-of-residence-user-input": country,
       "str:cm:source-page-url": window.location.href
     };
-
-    if (SCID) attributes["str:cm:scid"] = SCID;
 
     var urlAttrs = getUrlParams();
     Object.keys(urlAttrs).forEach(function (k) { attributes[k] = urlAttrs[k]; });
