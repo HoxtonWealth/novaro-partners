@@ -145,7 +145,15 @@
   /* ── FORM ── */
   .form-group { margin-bottom: 12px; }
 
-  .form-group input {
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .form-group input,
+  .form-group select {
     width: 100%;
     padding: 12px 14px;
     border: 1px solid var(--np-border);
@@ -157,11 +165,66 @@
     transition: border-color 0.2s, box-shadow 0.2s;
     -webkit-appearance: none;
     appearance: none;
+    min-height: 46px;
+  }
+
+  .form-group select {
+    padding-right: 36px;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'><path d='M1 1.5L6 6.5L11 1.5' stroke='%235a5a5a' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 12px;
+    cursor: pointer;
+  }
+
+  .form-group select:invalid,
+  .form-group select option[value=""] {
+    color: #94a3b8;
   }
 
   .form-group input::placeholder { color: #94a3b8; }
 
-  .form-group input:focus {
+  .form-group input:focus,
+  .form-group select:focus {
+    outline: none;
+    border-color: var(--np-green);
+    box-shadow: 0 0 0 3px rgba(26, 74, 58, 0.12);
+  }
+
+  .phone-row {
+    display: grid;
+    grid-template-columns: 130px 1fr;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .phone-row select,
+  .phone-row input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--np-border);
+    border-radius: 4px;
+    font-family: var(--np-font-sans);
+    font-size: 16px;
+    color: var(--np-text);
+    background: var(--np-white);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    -webkit-appearance: none;
+    appearance: none;
+    min-height: 46px;
+  }
+
+  .phone-row select {
+    padding-right: 30px;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'><path d='M1 1.5L6 6.5L11 1.5' stroke='%235a5a5a' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px;
+    cursor: pointer;
+  }
+
+  .phone-row select:focus,
+  .phone-row input:focus {
     outline: none;
     border-color: var(--np-green);
     box-shadow: 0 0 0 3px rgba(26, 74, 58, 0.12);
@@ -187,6 +250,16 @@
 
   .submit-btn:hover { background: var(--np-green-light); }
   .submit-btn:active { background: var(--np-green); }
+  .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  .form-message {
+    margin-top: 12px;
+    font-size: 14px;
+    line-height: 1.5;
+    min-height: 20px;
+  }
+  .form-message.success { color: var(--np-green); }
+  .form-message.error { color: #b00020; }
 
   /* ── HOXTON BANNER ── */
   .hoxton-banner { background: var(--np-green-dark); text-align: center; padding: 56px 24px; }
@@ -312,17 +385,31 @@
       <h3>Contact Us</h3>
       <div class="section-line"></div>
       <p>Leave your details below and we will be in touch.</p>
-      <form onsubmit="event.preventDefault(); alert('Form submitted!');">
-        <div class="form-group">
-          <input type="text" placeholder="Full Name" required aria-label="Full Name">
+      <form id="contactForm" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <input type="text" name="firstName" placeholder="First Name" required aria-label="First Name" autocomplete="given-name">
+          </div>
+          <div class="form-group">
+            <input type="text" name="lastName" placeholder="Last Name" required aria-label="Last Name" autocomplete="family-name">
+          </div>
         </div>
         <div class="form-group">
-          <input type="email" placeholder="Email Address" required aria-label="Email Address">
+          <input type="email" name="email" placeholder="Email Address" required aria-label="Email Address" autocomplete="email">
         </div>
         <div class="form-group">
-          <input type="tel" placeholder="Phone Number" aria-label="Phone Number">
+          <select name="country" id="countrySelect" required aria-label="Country of Residence" autocomplete="country">
+            <option value="" disabled selected>Country of Residence</option>
+          </select>
         </div>
-        <button type="submit" class="submit-btn">Request a Call Back</button>
+        <div class="phone-row">
+          <select name="phoneCode" id="phoneCodeSelect" required aria-label="Phone Country Code">
+            <option value="" disabled selected>Code</option>
+          </select>
+          <input type="tel" name="phone" placeholder="Phone Number" required aria-label="Phone Number" autocomplete="tel-national" inputmode="tel">
+        </div>
+        <button type="submit" class="submit-btn" id="submitBtn">Request a Call Back</button>
+        <div class="form-message" id="formMessage" role="status" aria-live="polite"></div>
       </form>
     </div>
   </div>
@@ -337,6 +424,212 @@
 <footer class="footer">
   <p>Novaro Partners is a trading style of Hoxton Wealth.</p>
 </footer>
+
+<script>
+(function () {
+  // Hardcoded SCID for this landing page. Fill in when provided.
+  var SCID = "";
+
+  // [ISO alpha-2, Country Name, Dial Code]
+  var COUNTRIES = [
+    ["AF","Afghanistan","93"],["AL","Albania","355"],["DZ","Algeria","213"],["AS","American Samoa","1684"],
+    ["AD","Andorra","376"],["AO","Angola","244"],["AI","Anguilla","1264"],["AG","Antigua and Barbuda","1268"],
+    ["AR","Argentina","54"],["AM","Armenia","374"],["AW","Aruba","297"],["AU","Australia","61"],
+    ["AT","Austria","43"],["AZ","Azerbaijan","994"],["BS","Bahamas","1242"],["BH","Bahrain","973"],
+    ["BD","Bangladesh","880"],["BB","Barbados","1246"],["BY","Belarus","375"],["BE","Belgium","32"],
+    ["BZ","Belize","501"],["BJ","Benin","229"],["BM","Bermuda","1441"],["BT","Bhutan","975"],
+    ["BO","Bolivia","591"],["BA","Bosnia and Herzegovina","387"],["BW","Botswana","267"],["BR","Brazil","55"],
+    ["IO","British Indian Ocean Territory","246"],["VG","British Virgin Islands","1284"],["BN","Brunei","673"],["BG","Bulgaria","359"],
+    ["BF","Burkina Faso","226"],["BI","Burundi","257"],["KH","Cambodia","855"],["CM","Cameroon","237"],
+    ["CA","Canada","1"],["CV","Cape Verde","238"],["KY","Cayman Islands","1345"],["CF","Central African Republic","236"],
+    ["TD","Chad","235"],["CL","Chile","56"],["CN","China","86"],["CX","Christmas Island","61"],
+    ["CC","Cocos Islands","61"],["CO","Colombia","57"],["KM","Comoros","269"],["CK","Cook Islands","682"],
+    ["CR","Costa Rica","506"],["HR","Croatia","385"],["CU","Cuba","53"],["CW","Curacao","599"],
+    ["CY","Cyprus","357"],["CZ","Czech Republic","420"],["CD","Democratic Republic of the Congo","243"],["DK","Denmark","45"],
+    ["DJ","Djibouti","253"],["DM","Dominica","1767"],["DO","Dominican Republic","1"],["TL","East Timor","670"],
+    ["EC","Ecuador","593"],["EG","Egypt","20"],["SV","El Salvador","503"],["GQ","Equatorial Guinea","240"],
+    ["ER","Eritrea","291"],["EE","Estonia","372"],["ET","Ethiopia","251"],["FK","Falkland Islands","500"],
+    ["FO","Faroe Islands","298"],["FJ","Fiji","679"],["FI","Finland","358"],["FR","France","33"],
+    ["PF","French Polynesia","689"],["GA","Gabon","241"],["GM","Gambia","220"],["GE","Georgia","995"],
+    ["DE","Germany","49"],["GH","Ghana","233"],["GI","Gibraltar","350"],["GR","Greece","30"],
+    ["GL","Greenland","299"],["GD","Grenada","1473"],["GU","Guam","1671"],["GT","Guatemala","502"],
+    ["GG","Guernsey","44"],["GN","Guinea","224"],["GW","Guinea-Bissau","245"],["GY","Guyana","592"],
+    ["HT","Haiti","509"],["HN","Honduras","504"],["HK","Hong Kong","852"],["HU","Hungary","36"],
+    ["IS","Iceland","354"],["IN","India","91"],["ID","Indonesia","62"],["IR","Iran","98"],
+    ["IQ","Iraq","964"],["IE","Ireland","353"],["IM","Isle of Man","44"],["IL","Israel","972"],
+    ["IT","Italy","39"],["CI","Ivory Coast","225"],["JM","Jamaica","1876"],["JP","Japan","81"],
+    ["JE","Jersey","44"],["JO","Jordan","962"],["KZ","Kazakhstan","7"],["KE","Kenya","254"],
+    ["KI","Kiribati","686"],["XK","Kosovo","383"],["KW","Kuwait","965"],["KG","Kyrgyzstan","996"],
+    ["LA","Laos","856"],["LV","Latvia","371"],["LB","Lebanon","961"],["LS","Lesotho","266"],
+    ["LR","Liberia","231"],["LY","Libya","218"],["LI","Liechtenstein","423"],["LT","Lithuania","370"],
+    ["LU","Luxembourg","352"],["MO","Macau","853"],["MK","Macedonia","389"],["MG","Madagascar","261"],
+    ["MW","Malawi","265"],["MY","Malaysia","60"],["MV","Maldives","960"],["ML","Mali","223"],
+    ["MT","Malta","356"],["MH","Marshall Islands","692"],["MR","Mauritania","222"],["MU","Mauritius","230"],
+    ["YT","Mayotte","262"],["MX","Mexico","52"],["FM","Micronesia","691"],["MD","Moldova","373"],
+    ["MC","Monaco","377"],["MN","Mongolia","976"],["ME","Montenegro","382"],["MS","Montserrat","1664"],
+    ["MA","Morocco","212"],["MZ","Mozambique","258"],["MM","Myanmar","95"],["NA","Namibia","264"],
+    ["NR","Nauru","674"],["NP","Nepal","977"],["NL","Netherlands","31"],["NC","New Caledonia","687"],
+    ["NZ","New Zealand","64"],["NI","Nicaragua","505"],["NE","Niger","227"],["NG","Nigeria","234"],
+    ["NU","Niue","683"],["KP","North Korea","850"],["MP","Northern Mariana Islands","1670"],["NO","Norway","47"],
+    ["OM","Oman","968"],["PK","Pakistan","92"],["PW","Palau","680"],["PS","Palestine","970"],
+    ["PA","Panama","507"],["PG","Papua New Guinea","675"],["PY","Paraguay","595"],["PE","Peru","51"],
+    ["PH","Philippines","63"],["PL","Poland","48"],["PT","Portugal","351"],["PR","Puerto Rico","1"],
+    ["QA","Qatar","974"],["CG","Republic of the Congo","242"],["RE","Reunion","262"],["RO","Romania","40"],
+    ["RU","Russia","7"],["RW","Rwanda","250"],["BL","Saint Barthelemy","590"],["SH","Saint Helena","290"],
+    ["KN","Saint Kitts and Nevis","1869"],["LC","Saint Lucia","1758"],["MF","Saint Martin","590"],["PM","Saint Pierre and Miquelon","508"],
+    ["VC","Saint Vincent and the Grenadines","1784"],["WS","Samoa","685"],["SM","San Marino","378"],["ST","Sao Tome and Principe","239"],
+    ["SA","Saudi Arabia","966"],["SN","Senegal","221"],["RS","Serbia","381"],["SC","Seychelles","248"],
+    ["SL","Sierra Leone","232"],["SG","Singapore","65"],["SX","Sint Maarten","1721"],["SK","Slovakia","421"],
+    ["SI","Slovenia","386"],["SB","Solomon Islands","677"],["SO","Somalia","252"],["ZA","South Africa","27"],
+    ["KR","South Korea","82"],["SS","South Sudan","211"],["ES","Spain","34"],["LK","Sri Lanka","94"],
+    ["SD","Sudan","249"],["SR","Suriname","597"],["SZ","Swaziland","268"],["SE","Sweden","46"],
+    ["CH","Switzerland","41"],["SY","Syria","963"],["TW","Taiwan","886"],["TJ","Tajikistan","992"],
+    ["TZ","Tanzania","255"],["TH","Thailand","66"],["TG","Togo","228"],["TK","Tokelau","690"],
+    ["TO","Tonga","676"],["TT","Trinidad and Tobago","1868"],["TN","Tunisia","216"],["TR","Turkey","90"],
+    ["TM","Turkmenistan","993"],["TC","Turks and Caicos Islands","1649"],["TV","Tuvalu","688"],["VI","U.S. Virgin Islands","1340"],
+    ["UG","Uganda","256"],["UA","Ukraine","380"],["AE","United Arab Emirates","971"],["GB","United Kingdom","44"],
+    ["US","United States","1"],["UY","Uruguay","598"],["UZ","Uzbekistan","998"],["VU","Vanuatu","678"],
+    ["VA","Vatican","39"],["VE","Venezuela","58"],["VN","Vietnam","84"],["WF","Wallis and Futuna","681"],
+    ["EH","Western Sahara","212"],["YE","Yemen","967"],["ZM","Zambia","260"],["ZW","Zimbabwe","263"]
+  ];
+
+  function flagEmoji(code) {
+    return code.toUpperCase().replace(/./g, function (c) {
+      return String.fromCodePoint(127397 + c.charCodeAt(0));
+    });
+  }
+
+  var countrySelect = document.getElementById("countrySelect");
+  var phoneCodeSelect = document.getElementById("phoneCodeSelect");
+
+  // Sort by name for country dropdown
+  var sortedByName = COUNTRIES.slice().sort(function (a, b) {
+    return a[1].localeCompare(b[1]);
+  });
+  sortedByName.forEach(function (c) {
+    var opt = document.createElement("option");
+    opt.value = c[0];
+    opt.textContent = flagEmoji(c[0]) + "  " + c[1];
+    countrySelect.appendChild(opt);
+  });
+
+  // Phone code dropdown: sort by country name, display flag + +dial
+  sortedByName.forEach(function (c) {
+    var opt = document.createElement("option");
+    opt.value = c[2];
+    opt.textContent = flagEmoji(c[0]) + "  +" + c[2];
+    opt.setAttribute("data-country", c[1]);
+    phoneCodeSelect.appendChild(opt);
+  });
+
+  // When country changes, auto-set phone code to the same country (if user hasn't picked one yet)
+  countrySelect.addEventListener("change", function () {
+    if (!phoneCodeSelect.value) {
+      var match = COUNTRIES.find(function (c) { return c[0] === countrySelect.value; });
+      if (match) phoneCodeSelect.value = match[2];
+    }
+  });
+
+  // Collect UTM / tracking params from current URL
+  function getUrlParams() {
+    var params = new URLSearchParams(window.location.search);
+    var out = {};
+    [
+      ["utm_source", "str:cm:utmsource"],
+      ["utm_medium", "str:cm:utmmedium"],
+      ["utm_campaign", "str:cm:campaignname-google-url-paramcookie"],
+      ["utm_adgroup", "str:cm:adgroup-google-url-paramcookie"],
+      ["adgroup", "str:cm:adgroup-google-url-paramcookie"],
+      ["placement", "str:cm:placement-google-url-paramcookie"],
+      ["article_category", "str:cm:article-category-blog-category"]
+    ].forEach(function (pair) {
+      var v = params.get(pair[0]);
+      if (v) out[pair[1]] = v;
+    });
+    return out;
+  }
+
+  var form = document.getElementById("contactForm");
+  var submitBtn = document.getElementById("submitBtn");
+  var messageEl = document.getElementById("formMessage");
+
+  function setMessage(type, text) {
+    messageEl.className = "form-message" + (type ? " " + type : "");
+    messageEl.textContent = text || "";
+  }
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    setMessage("", "");
+
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
+    var fd = new FormData(form);
+    var firstName = (fd.get("firstName") || "").toString().trim();
+    var lastName = (fd.get("lastName") || "").toString().trim();
+    var email = (fd.get("email") || "").toString().trim();
+    var country = (fd.get("country") || "").toString().trim();
+    var phoneCode = (fd.get("phoneCode") || "").toString().trim();
+    var phone = (fd.get("phone") || "").toString().replace(/\D/g, "");
+
+    var attributes = {
+      "int::v": Math.floor(Date.now() / 1000),
+      "phn:cm:mobile-number-user-input": { c: phoneCode, n: phone },
+      "str:cm:email": email,
+      "str:cm:first-name-user-input": firstName,
+      "str:cm:last-name-user-input": lastName,
+      "str:cm:country-of-residence-user-input": country,
+      "str:cm:source-page-url": window.location.href
+    };
+
+    if (SCID) attributes["str:cm:scid"] = SCID;
+
+    var urlAttrs = getUrlParams();
+    Object.keys(urlAttrs).forEach(function (k) { attributes[k] = urlAttrs[k]; });
+
+    var payload = {
+      activities: [{
+        activity_id: "act:cm:website-form-submitted",
+        attributes: attributes,
+        fields: { "str::email": email },
+        location: { source_ip: null, custom: null, address: null }
+      }],
+      merge_by: ["str::email"]
+    };
+
+    submitBtn.disabled = true;
+    var originalLabel = submitBtn.textContent;
+    submitBtn.textContent = "Sending...";
+
+    fetch("/api/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    })
+      .then(function (res) {
+        if (!res.ok) {
+          return res.text().then(function (t) { throw new Error(t || "Request failed"); });
+        }
+        return res.text();
+      })
+      .then(function () {
+        form.reset();
+        setMessage("success", "Thank you. A member of the team will be in touch shortly.");
+      })
+      .catch(function (err) {
+        console.error(err);
+        setMessage("error", "Sorry, something went wrong. Please try again or email us directly.");
+      })
+      .finally(function () {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalLabel;
+      });
+  });
+})();
+</script>
 
 </body>
 </html>
